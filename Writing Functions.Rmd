@@ -1,0 +1,116 @@
+---
+title: "Writing Functions"
+output: html_document
+date: "2026-10-29"
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(rvest)
+library(readxl)
+```
+
+## Functions 
+
+Start small with Z scores 
+
+```{r}
+x_vec = rnorm(n = 40, mean = 12, sd = 63)
+
+(x_vec - mean(x_vec)) / sd(x_vec) 
+
+```
+Lets turn this into a function
+
+```{r}
+z_scores = function(x) {
+  
+  if(!is.numeric(x)) {
+    stop("Input x must be numeric")
+    } else if (length(x) < 5) {
+    stop("x should have 5 or more numbers")
+  }
+  
+ z = (x - mean(x)) / sd(x) 
+ 
+ return(z)
+ 
+}
+
+# Z only exists inside this function as long as this function is working 
+# X is also an argument inside the function 
+# x_vec exists 
+```
+
+Does this work?
+
+```{r}
+z_scores(x_vec)
+z_scores(rpois(4000, lambda = 12))
+
+```
+
+## Mean and Sd
+
+```{r}
+mean(x_vec)
+sd(x_vec) 
+```
+
+Write a function that returns the mean and sd of an input vector 
+
+```{r}
+mean_and_sd = function(x) {
+  
+  return_df = 
+    tibble(
+      mean = mean(x),
+      sd = sd(x)
+      )
+    
+    return(return_df)
+}
+```
+
+## Motivate and write another one!!
+
+```{r}
+sim_df = 
+  tibble(
+    x =rnorm(n = 40, mean = 12, sd = 3)
+  )
+
+sim_df |>
+  summarize(
+    mean = mean(x), 
+    sd = sd(x)
+  )
+```
+```{r}
+source("Source/sim_mean_sd.R")
+```
+
+```{r}
+sim_mean_sd(n_obs = 50, mu = 150, sigma = 30)
+
+sim_mean_sd(50, 12, 3)
+
+sim_mean_sd(150, n_obs,)
+```
+
+## Fix things that bother me 
+
+```{r}
+fellowship_df = 
+  read_excel("data/LotR_Words.xlsx", range = "B3:D6") |>
+  mutate(movie = "fellowship")
+
+two_tower_df = 
+  read_excel("data/LotR_Words.xlsx", range = "F3:H6") |>
+  mutate(movie = "two_towers")
+
+return_df = 
+  read_excel("data/LotR_Words.xlsx", range = "J3:L6") |>
+  mutate(movie = "return_of_king")
+```
+
